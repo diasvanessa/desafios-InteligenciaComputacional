@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação Rápida com Código - Desafio 1 | GBC073</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --code-bg: #070a12;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Container do Slide */
+    .deck {
+      position: relative;
+      width: 98vw;
+      max-width: 1600px;
+      height: 92vh;
+      max-height: 920px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px 46px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.98);
+      transition: all 0.25s ease;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    /* Cabeçalho */
+    .slide-header {
+      margin-bottom: 16px;
+    }
+
+    .slide-tag {
+      font-family: var(--font-code);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
+    }
+
+    .slide-title {
+      font-family: var(--font-title);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .slide-title span {
+      color: var(--cyan);
+    }
+
+    /* Layout de 2 colunas: Explicação + Código */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 22px;
+      flex: 1;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    /* Caixas de Explicação */
+    .explain-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .explain-card h3 {
+      font-family: var(--font-title);
+      font-size: 1.15rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .explain-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .explain-item {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      border-left: 3px solid var(--cyan);
+      padding-left: 14px;
+    }
+
+    .explain-item.emerald {
+      border-left-color: var(--cyan);
+    }
+
+    .explain-item.amber {
+      border-left-color: var(--cyan);
+    }
+
+    .explain-item strong {
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    /* Bloco de Código */
+    .code-card {
+      background: var(--code-bg);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .code-badge {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-family: var(--font-code);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    pre.code-block {
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: #e2e8f0;
+      overflow-x: auto;
+      margin-top: 16px;
+      flex: 1;
+    }
+
+    /* Cores de Sintaxe */
+    .c-kw { color: #f472b6; font-weight: 600; }
+    .c-fn { color: #38bdf8; }
+    .c-cm { color: #64748b; font-style: italic; }
+    .c-num { color: #fbbf24; }
+    .c-str { color: #34d399; }
+    .c-hl { background: rgba(56, 189, 248, 0.15); padding: 1px 4px; border-radius: 3px; color: var(--cyan); font-weight: 600; }
+
+    /* Barra Inferior de Navegação */
+    .nav-bar {
+      position: fixed;
+      bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 16px;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+
+    .nav-btn:hover {
+      color: var(--cyan);
+    }
+
+    .nav-indicator {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      color: var(--muted);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--cyan);
+      transition: width 0.25s ease;
+    }
+
+    /* Capa */
+    .cover-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cover-title {
+      font-family: var(--font-title);
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: #fff;
+      margin-top: 20px;
+    }
+
+    .cover-authors {
+      font-size: 1.15rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    .cover-stats {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 22px;
+      border-radius: 12px;
+    }
+
+    .stat-val {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .stat-txt {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* Tabela Slide 5 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px 12px;
+      color: var(--cyan);
+      font-family: var(--font-title);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+
+  <div class="deck">
+
+    <!-- ========================================================== -->
+    <!-- SLIDE 1: CAPA -->
+    <!-- ========================================================== -->
+    <div class="slide active">
+      <div class="cover-content">
+        <div>
+          <div class="slide-tag">GBC073 • Inteligência Computacional (FACOM / UFU)</div>
+          <h1 class="cover-title">
+            Desafio 1: Mapa de Características<br>
+            <span style="color: var(--cyan);">para o Perceptron Linear</span>
+          </h1>
+          <p class="cover-authors">
+            <strong>Vanessa Dias Ferreira</strong> (12221BCC017) & <strong>Matheus Dantas Santana</strong> (12221BCC009)<br>
+            Prof. Marcelo Albertini
+          </p>
+        </div>
+
+        <div class="cover-stats">
+          <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.3);">
+            <div class="stat-val">104.0</div>
+            <div class="stat-txt">Score Oficial (Ref: 100.0)</div>
+          </div>
+          <div class="stat-pill" style="border-color: rgba(52, 211, 153, 0.3);">
+            <div class="stat-val" style="color: var(--emerald);">+25%</div>
+            <div class="stat-txt">Bônus Máximo na Esfera 10D</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-val" style="color: #fff;">64</div>
+            <div class="stat-txt">Dimensões Utilizadas ($d' \le 64$)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SLIDE 2: FIT - PARTE 1: PADRONIZAÇÃO E MEDIANA -->
+    <!-- ========================================================== -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-tag">01 • Treino Não-Supervisionado (fit)</div>
+        <h2 class="slide-title">Padronização e a <span>Heurística da Mediana</span></h2>
+      </div>
+
+      <div class="split-layout">
+        <!-- Lado Conceitual -->
+        <div class="explain-card">
+          <ul class="explain-list">
+            <li class="explain-item">
+              <strong>1. Padronização Robusta (Sem Rótulos)</strong>
+              Subtrai a média e divide pelo desvio padrão com $+10^{-8}$ para evitar divisão por zero. Centraliza todas as variáveis na mesma escala.
+            </li>
+            <li class="explain-item amber">
+              <strong>2. O Risco de Pesos Aleatórios Cegos</strong>
+              Se os pesos forem grandes demais, a $\tanh$ satura em $\pm 1$ (vira degrau plano). Se forem pequenos, opera na reta linear ($\tanh(u) \approx u$).
+            </li>
+            <li class="explain-item emerald">
+              <strong>3. Calibração Adaptativa pelo Sigma ($\sigma$)</strong>
+              Mede a distância euclidiana ao quadrado entre amostras e toma a <em>mediana</em>. O $\sigma$ ajusta a curvatura da $\tanh$ exatamente ao raio da nuvem de dados!
+            </li>
+          </ul>
+        </div>
+
+        <!-- Lado Código -->
+        <div class="code-card">
+          <div class="code-badge">desafio1.ipynb: fit()</div>
+          <pre class="code-block"><code><span class="c-kw">def</span> <span class="c-fn">fit</span>(self, X: torch.Tensor) -> <span class="c-kw">None</span>:
+    <span class="c-cm"># 1. Padronização básica (média 0, desvio 1)</span>
+    self.mu, self.sd = X.mean(<span class="c-num">0</span>), X.std(<span class="c-num">0</span>) + <span class="c-num">1e-8</span>
+    Xs = (X - self.mu) / self.sd
+
+    <span class="c-cm"># 2. Distâncias euclidianas quadráticas (amostra)</span>
+    d2 = torch.<span class="c-fn">cdist</span>(Xs[:<span class="c-num">300</span>], Xs[:<span class="c-num">300</span>]) ** <span class="c-num">2</span>
+
+    <span class="c-cm"># 3. Escala dos pesos pela distância mediana</span>
+    sigma = math.<span class="c-fn">sqrt</span>(d2[d2 > <span class="c-num">0</span>].<span class="c-fn">median</span>().<span class="c-fn">item</span>() / <span class="c-num">2</span>) * <span class="c-num">0.7</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SLIDE 3: FIT - PARTE 2: PESOS TANH + TERMO RADIAL -->
+    <!-- ========================================================== -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-tag">02 • Alocação dos 64 Canais (fit)</div>
+        <h2 class="slide-title">Os <span>63 Neurônios tanh</span> + <span>1 Neurônio Radial</span></h2>
+      </div>
+
+      <div class="split-layout">
+        <!-- Lado Conceitual -->
+        <div class="explain-card">
+          <ul class="explain-list">
+            <li class="explain-item">
+              <strong>63 Neurônios tanh (Teorema de Cover)</strong>
+              Sorteia matriz $W$ escalonada por $\sigma$ e vieses $b \in [-2, 2]$. Cada neurônio aplica um corte diferente no espaço, desdobrando e contorcendo a nuvem de pontos para resolver <strong>XOR, Duas Luas e Espirais</strong>.
+            </li>
+            <li class="explain-item emerald">
+              <strong>1 Neurônio Radial ($r^2$ à Origem)</strong>
+              Calcula $\sum x_j^2$ — a distância ao quadrado até a origem. Dá a equação exata de círculos e esferas sem precisar de hiperplanos.
+            </li>
+            <li class="explain-item amber">
+              <strong>Cálculo em Float64</strong>
+              Garante que o resultado seja bit a bit idêntico em qualquer execução, inclusive no Google Colab onde variações de arredondamento podem surgir.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Lado Código -->
+        <div class="code-card">
+          <div class="code-badge">desafio1.ipynb: fit()</div>
+          <pre class="code-block"><code>    <span class="c-cm"># 4. Pesos da camada oculta (63 neurônios)</span>
+    num_neuronios = self.DIM_MAX - <span class="c-num">1</span>  <span class="c-cm"># 63</span>
+    g = torch.<span class="c-fn">Generator</span>().<span class="c-fn">manual_seed</span>(<span class="c-num">0</span>)
+
+    self.W = (torch.<span class="c-fn">randn</span>(X.shape[<span class="c-num">1</span>], num_neuronios, generator=g) / sigma).<span class="c-fn">double</span>()
+    self.b = (torch.<span class="c-fn">rand</span>(num_neuronios, generator=g) * <span class="c-num">4</span> - <span class="c-num">2</span>).<span class="c-fn">double</span>()
+
+    <span class="c-cm"># 5. Média e desvio do raio quadrático (r²)</span>
+    r2 = (Xs.<span class="c-fn">double</span>() ** <span class="c-num">2</span>).<span class="c-fn">sum</span>(dim=<span class="c-num">1</span>, keepdim=<span class="c-kw">True</span>)
+    self.mu_r2 = r2.<span class="c-fn">mean</span>()
+    self.sd_r2 = r2.<span class="c-fn">std</span>() + <span class="c-num">1e-8</span></code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SLIDE 4: PHI - TRANSFORMAÇÃO E O CORTE DA ESFERA -->
+    <!-- ========================================================== -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-tag">03 • Mapeamento em Execução (phi)</div>
+        <h2 class="slide-title">Execução Vetorizada: <span>Transformando (n, d) em (n, 64)</span></h2>
+      </div>
+
+      <div class="split-layout">
+        <!-- Lado Conceitual -->
+        <div class="explain-card">
+          <ul class="explain-list">
+            <li class="explain-item">
+              <strong>Multiplicação Matricial em Batch</strong>
+              Aplica $\mathbf{X}_s \mathbf{W} + \mathbf{b}$ e comprime na função $\tanh$, gerando 63 sinais não-lineares a partir das entradas originais.
+            </li>
+            <li class="explain-item emerald">
+              <strong>Coluna Radial ($r^2$)</strong>
+              Com ela, a hiperesfera deixa de ser um problema em 10D e vira uma separação linear direta: pontos com raio maior que a mediana de um lado, menores do outro.
+            </li>
+            <li class="explain-item">
+              <strong>Concatenação dos 64 Canais</strong>
+              Junta os 63 sinais da $\tanh$ com a coluna radial e devolve em <code>float32</code>.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Lado Código -->
+        <div class="code-card">
+          <div class="code-badge">desafio1.ipynb: phi()</div>
+          <pre class="code-block"><code><span class="c-kw">def</span> <span class="c-fn">phi</span>(self, X: torch.Tensor) -> torch.Tensor:
+    <span class="c-cm"># Normaliza entradas de teste</span>
+    Xs_d = ((X - self.mu) / self.sd).<span class="c-fn">double</span>()
+
+    <span class="c-cm"># 63 neurônios com ativação tanh</span>
+    h = torch.<span class="c-fn">tanh</span>(torch.<span class="c-fn">matmul</span>(Xs_d, self.W) + self.b).<span class="c-fn">float</span>()
+
+    <span class="c-cm"># 1 neurônio radial normalizado</span>
+    r2 = (Xs_d ** <span class="c-num">2</span>).<span class="c-fn">sum</span>(dim=<span class="c-num">1</span>, keepdim=<span class="c-kw">True</span>)
+    r2_norm = ((r2 - self.mu_r2) / self.sd_r2).<span class="c-fn">float</span>()
+
+    <span class="c-cm"># Saída determinística em R^64</span>
+    <span class="c-kw">return</span> torch.<span class="c-fn">cat</span>([h, r2_norm], dim=<span class="c-num">1</span>)</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SLIDE 5: RESULTADOS E CONCLUSÃO -->
+    <!-- ========================================================== -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-tag">04 • Avaliação no Harness</div>
+        <h2 class="slide-title">Resultados Oficiais e <span>Conclusão</span></h2>
+      </div>
+
+      <div class="split-layout">
+        <!-- Tabela -->
+        <div class="explain-card" style="padding: 14px 18px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Tarefa</th>
+                <th>Baseline</th>
+                <th>Referência</th>
+                <th>Nossa Submissão</th>
+                <th>$s_t$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>XOR</strong></td>
+                <td>0.606</td>
+                <td>0.876</td>
+                <td style="color: var(--cyan); font-weight: 700;">0.883</td>
+                <td>1.02</td>
+              </tr>
+              <tr>
+                <td><strong>Duas Luas</strong></td>
+                <td>0.892</td>
+                <td>0.983</td>
+                <td style="color: var(--cyan); font-weight: 700;">0.983</td>
+                <td>1.00</td>
+              </tr>
+              <tr>
+                <td><strong>Círculos</strong></td>
+                <td>0.644</td>
+                <td>1.000</td>
+                <td style="color: var(--cyan); font-weight: 700;">0.996</td>
+                <td>0.99</td>
+              </tr>
+              <tr>
+                <td><strong>Espiral</strong></td>
+                <td>0.633</td>
+                <td>0.912</td>
+                <td style="color: var(--cyan); font-weight: 700;">0.926</td>
+                <td>1.05</td>
+              </tr>
+              <tr style="background: rgba(52, 211, 153, 0.08);">
+                <td><strong>Esfera 10D</strong></td>
+                <td>0.508</td>
+                <td>0.872</td>
+                <td style="color: var(--emerald); font-weight: 800;">0.969</td>
+                <td style="color: var(--emerald); font-weight: 700;">1.25</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Banner Síntese -->
+        <div class="explain-card" style="justify-content: center; gap: 16px; text-align: center; border-color: rgba(56, 189, 248, 0.3);">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--muted); text-transform: uppercase;">Escore Final Ponderado</div>
+            <div style="font-family: var(--font-title); font-size: 3.4rem; font-weight: 800; color: var(--cyan); line-height: 1.1;">
+              S = 104.0
+            </div>
+            <div style="font-size: 0.88rem; color: var(--muted); margin-top: 4px;">
+              Fórmula: $S = 100 \times [ 0.7 \times \bar{s}_t + 0.3 \times \min(s_t) ]$
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; text-align: left; font-size: 0.95rem; color: #cbd5e1;">
+            <strong style="color: #fff;">Lição Principal:</strong><br>
+            A combinação de projeções suaves ($\tanh$) escaladas pela mediana com o conhecimento geométrico da simetria radial ($r^2$) superou modelos complexos com simplicidade analítica e altíssima velocidade.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navegação Flutuante -->
+  <div class="nav-bar">
+    <button class="nav-btn" id="btnPrev" title="Anterior (←)">←</button>
+    <div class="nav-indicator" id="indicator">1 / 5</div>
+    <button class="nav-btn" id="btnNext" title="Próximo (→ ou Espaço)">→</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const total = slides.length;
+    let current = 0;
+
+    const indicator = document.getElementById('indicator');
+    const progress = document.getElementById('progress');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+
+    function showSlide(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= total) idx = total - 1;
+
+      slides[current].classList.remove('active');
+      current = idx;
+      slides[current].classList.add('active');
+
+      indicator.textContent = `${current + 1} / ${total}`;
+      progress.style.width = `${((current + 1) / total) * 100}%`;
+    }
+
+    btnPrev.addEventListener('click', () => showSlide(current - 1));
+    btnNext.addEventListener('click', () => showSlide(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        showSlide(current + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        showSlide(current - 1);
+      } else if (e.key === 'f' || e.key === 'F') {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
