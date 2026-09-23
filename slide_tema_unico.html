@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apresentação do Tema - IC</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --code-bg: #070a12;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --purple: #c084fc;
+      --font-title: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deck {
+      position: relative;
+      width: 98vw;
+      max-width: 1600px;
+      height: 92vh;
+      max-height: 920px;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    .slide-header { margin-bottom: 24px; }
+
+    .slide-tag {
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-family: var(--font-title);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .slide-title span { color: var(--cyan); }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      flex: 1;
+      align-items: stretch;
+      min-height: 0;
+    }
+
+    .explain-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .explain-card h3 {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 12px;
+    }
+
+    .explain-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .explain-item {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      border-left: 3px solid var(--cyan);
+      padding-left: 16px;
+    }
+
+    .explain-item.emerald { border-left-color: var(--emerald); }
+    .explain-item.amber { border-left-color: var(--amber); }
+    .explain-item.purple { border-left-color: var(--purple); }
+
+    .explain-item strong {
+      color: #fff;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--cyan);
+    }
+
+    .stat-txt {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+
+    .data-pill-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .data-pill {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      color: var(--cyan);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      width: 90vw;
+      max-width: 1200px;
+      max-height: 85vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transform: scale(0.95);
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.open .modal-content {
+      transform: scale(1);
+    }
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-family: var(--font-title);
+      color: #fff;
+      font-size: 1.4rem;
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-btn:hover {
+      color: #fff;
+    }
+    .modal-body {
+      padding: 0;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .modal-table th, .modal-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .modal-table th {
+      color: var(--cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 0;
+    }
+    .modal-table td {
+      color: #cbd5e1;
+    }
+    .btn-popup {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--cyan);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      font-size: 1.05rem;
+    }
+    .btn-popup:hover {
+      background: rgba(56, 189, 248, 0.2);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck">
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-tag">GBC073 • Inteligência Computacional (FACOM / UFU)</div>
+        <h2 class="slide-title">Predição de Notas de Filmes:<br><span>Extração e Tratamento de Dados (TMDB)</span></h2>
+      </div>
+
+      <div class="split-layout">
+        <!-- Coluna Esquerda: O Desafio e Dados -->
+        <div class="explain-card">
+          <h3>O Nosso Dataset</h3>
+          
+          <div class="stats-container">
+            <div class="stat-pill" style="border-color: rgba(56, 189, 248, 0.3);">
+              <div class="stat-val">127 Anos</div>
+              <div class="stat-txt">Histórico (1920 - 2026)</div>
+            </div>
+            <div class="stat-pill" style="border-color: rgba(52, 211, 153, 0.3);">
+              <div class="stat-val" style="color: var(--emerald);">100k+</div>
+              <div class="stat-txt">Filmes Extraídos via API</div>
+            </div>
+          </div>
+
+          <ul class="explain-list">
+            <li class="explain-item emerald">
+              <strong>Atributos Base Extraídos</strong>
+              Orçamento, receita, duração, popularidade, gêneros, linguagem, <strong>diretor e elenco</strong>.
+            </li>
+          </ul>
+
+          <div style="margin-top: 10px;">
+            <div style="color: var(--muted); font-size: 0.9rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Algumas Features Chave:</div>
+            <div class="data-pill-container">
+              <div class="data-pill">budget</div>
+              <div class="data-pill">popularity</div>
+              <div class="data-pill">vote_count</div>
+              <div class="data-pill">director</div>
+              <div class="data-pill">cast</div>
+              <div class="data-pill">genre_ids</div>
+            </div>
+          </div>
+
+          <!-- Tabela Interativa (Botão Popup) -->
+          <div style="margin-top: 20px;">
+            <button class="btn-popup" id="openModalBtn">
+              Ver Tabela Completa de Exemplos (2026)
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna Direita: O Tratamento -->
+        <div class="explain-card" style="border-color: rgba(251, 191, 36, 0.2);">
+          <h3 style="color: var(--amber);">Pipeline de Tratamento de Dados</h3>
+          <ul class="explain-list">
+            <li class="explain-item amber">
+              <strong>1. Engenharia Temporal (Datas)</strong>
+              Quebra de <code>release_date</code> (YYYY-MM-DD) para gerar novas features vitais numéricas: <code>release_year</code> (capta inflação de notas e épocas) e <code>release_month</code> (sazonalidade).
+            </li>
+            <li class="explain-item purple">
+              <strong>2. Binarização: Gêneros e Idiomas</strong>
+              Listas com gêneros e os idiomas mais populares se transformam em colunas binárias exclusivas (<code>is_action=1</code>, <code>is_comedy=0</code>), facilitando o entendimento dos dados pelo modelo.
+            </li>
+            <li class="explain-item">
+              <strong>3. Suavização de Escalas</strong>
+              Para colunas com variância elevada (como filmes indo de 10 a 30.000 votos), aplica-se a transformação logarítmica para encurtar a distribuição de dados e evitar o viés causado por outliers extremos.
+            </li>
+            <li class="explain-item emerald">
+              <strong>4. Filtragem de Textos Livres</strong>
+              Remoção direta de textos descritivos como <code>overview</code> e <code>title</code>, mantendo apenas metadados que agregam valor direto.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="exampleModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Filmes de 2026 (Exemplos Extraídos)</h3>
+        <button class="close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table class="modal-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>IMDb</th>
+              <th>Título</th>
+              <th>Data Lanc.</th>
+              <th>Popularidade</th>
+              <th>Gêneros</th>
+              <th>Idioma</th>
+              <th>Duração</th>
+              <th>Orçamento</th>
+              <th>Receita</th>
+              <th>Estúdios</th>
+              <th>Diretor</th>
+              <th>Elenco Principal</th>
+              <th>Nº Votos</th>
+              <th>Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>969681</td>
+              <td style="font-family: var(--font-code);">tt22084616</td>
+              <td style="color: #fff; font-weight: 600;">Spider-Man: Brand New Day</td>
+              <td>2026-07-29</td>
+              <td>652.70</td>
+              <td style="font-family: var(--font-code);">[878, 28, 12]</td>
+              <td>en</td>
+              <td>145 min</td>
+              <td>$225.0M</td>
+              <td>$2.45B</td>
+              <td style="font-size: 0.8rem;">Marvel Studios, Columbia Pictures, Pascal Pictures, TSG Entertainment</td>
+              <td>Destin Daniel Cretton</td>
+              <td style="font-size: 0.8rem;">Tom Holland, Zendaya, Mark Ruffalo, Jon Bernthal, Jacob Batalon</td>
+              <td>2,755</td>
+              <td style="color: var(--emerald); font-weight: 700;">7.85</td>
+            </tr>
+            <tr>
+              <td>1368337</td>
+              <td style="font-family: var(--font-code);">tt33764258</td>
+              <td style="color: #fff; font-weight: 600;">The Odyssey</td>
+              <td>2026-07-15</td>
+              <td>371.06</td>
+              <td style="font-family: var(--font-code);">[12, 28, 14]</td>
+              <td>en</td>
+              <td>173 min</td>
+              <td>$250.0M</td>
+              <td>$1.68B</td>
+              <td style="font-size: 0.8rem;">Universal Pictures, Syncopy</td>
+              <td>Christopher Nolan</td>
+              <td style="font-size: 0.8rem;">Matt Damon, Tom Holland, Anne Hathaway, Robert Pattinson, Himesh Patel</td>
+              <td>3,776</td>
+              <td style="color: var(--emerald); font-weight: 700;">8.01</td>
+            </tr>
+            <tr>
+              <td>1339713</td>
+              <td style="font-family: var(--font-code);">tt37287335</td>
+              <td style="color: #fff; font-weight: 600;">Obsession</td>
+              <td>2026-05-13</td>
+              <td>130.41</td>
+              <td style="font-family: var(--font-code);">[27, 53]</td>
+              <td>en</td>
+              <td>109 min</td>
+              <td>$750K</td>
+              <td>$513.8M</td>
+              <td style="font-size: 0.8rem;">Tea Shop Productions, Under the Shell, Capstone Pictures, Blumhouse Productions</td>
+              <td>Curry Barker</td>
+              <td style="font-size: 0.8rem;">Michael Johnston, Inde Navarrette, Cooper Tomlinson, Megan Lawless, Andy Richter</td>
+              <td>5,586</td>
+              <td style="color: var(--emerald); font-weight: 700;">8.19</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('exampleModal');
+    const openBtn = document.getElementById('openModalBtn');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('open');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('open');
+    });
+
+    // Close on click outside
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>
