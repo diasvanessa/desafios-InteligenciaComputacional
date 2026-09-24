@@ -7,6 +7,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX para renderização de fórmulas matemáticas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderAllMath();"></script>
   <style>
     :root {
       --bg: #0B0F19;
@@ -63,10 +69,10 @@
 
     /* Cabeçalho */
     header {
-      padding: 24px 36px 16px;
+      padding: 14px 36px 12px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
+      align-items: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
@@ -90,12 +96,6 @@
       font-weight: 600;
     }
 
-    .title-group p {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
-
     .authors-box {
       text-align: right;
     }
@@ -115,8 +115,8 @@
     .slide-body {
       display: grid;
       grid-template-columns: 1fr 1.05fr;
-      gap: 24px;
-      padding: 24px 36px;
+      gap: 20px;
+      padding: 16px 36px 24px;
       flex: 1;
       min-height: 0;
     }
@@ -138,7 +138,7 @@
     }
 
     .card-title {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -152,34 +152,89 @@
     .card-title.yellow { color: var(--accent); }
     .card-title.green { color: var(--success); }
 
-    /* Fórmula Teórica em Destaque */
-    .formula-box {
-      background: rgba(15, 23, 42, 0.8);
+    /* Regime Extremo Banner */
+    .regime-banner {
+      background: rgba(15, 23, 42, 0.65);
       border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin: 10px 0;
-      font-family: var(--mono);
-      font-size: 14px;
+      border-radius: 8px;
+      padding: 8px 14px;
+      margin-bottom: 10px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
+    }
+
+    .regime-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #E2E8F0;
+    }
+
+    .regime-tag {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--primary);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .regime-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      line-height: 1.4;
+    }
+
+    /* Fórmula Teórica em Destaque */
+    .formula-box {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      padding: 12px 18px;
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .formula-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .formula-line b {
+    .formula-line span:first-child {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 500;
+    }
+
+    .formula-math {
+      font-size: 15.5px;
+      color: #F8FAFC;
+    }
+
+    .formula-math.highlight {
       color: var(--primary);
+      font-weight: 700;
+    }
+
+    .katex {
+      font-size: 1.08em;
     }
 
     .theory-list {
       list-style: none;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 13.5px;
+      line-height: 1.55;
       color: #CBD5E1;
       display: flex;
       flex-direction: column;
@@ -189,13 +244,15 @@
     .theory-list li {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
     .theory-list li::before {
       content: "•";
       color: var(--primary);
       font-weight: bold;
+      font-size: 16px;
+      line-height: 1.2;
     }
 
     /* Navegação dos Experimentos de Sala */
@@ -210,9 +267,9 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 7px 10px;
+      padding: 8px 12px;
       border-radius: 8px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       font-family: var(--sans);
       cursor: pointer;
@@ -232,34 +289,81 @@
     }
 
     .exp-content {
-      font-size: 12.5px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.55;
       color: #CBD5E1;
-      background: rgba(11, 15, 25, 0.5);
-      border-radius: 8px;
-      padding: 12px 14px;
-      border-left: 3px solid var(--accent);
-      min-height: 94px;
-    }
-
-    .exp-title {
-      font-weight: 700;
-      color: #FFF;
-      margin-bottom: 4px;
+      background: rgba(11, 15, 25, 0.55);
+      border-radius: 10px;
+      padding: 16px 18px;
+      border-left: 4px solid var(--accent);
+      min-height: 100px;
+      flex: 1;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
     }
 
+    .exp-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFF;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .badge-status {
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 5px;
       font-family: var(--mono);
       font-weight: 600;
     }
 
     .badge-fail { background: rgba(248, 113, 113, 0.2); color: var(--danger); }
     .badge-ok { background: rgba(52, 211, 153, 0.2); color: var(--success); }
+
+    .code-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-label::before {
+      content: "";
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .exp-code {
+      background: #080D18;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #CBD5E1;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 0;
+    }
+
+    .exp-code .kw { color: #F472B6; font-weight: 600; }
+    .exp-code .fn { color: #38BDF8; }
+    .exp-code .num { color: #FBBF24; }
+    .exp-code .com { color: #64748B; font-style: italic; }
 
     /* Coluna Direita: Gráfico de Variância */
     .col-right {
@@ -282,9 +386,10 @@
 
     .chart-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
     .chart-header h3 {
@@ -348,160 +453,92 @@
       fill: none;
     }
 
-    /* Painel de Funções e Engenharia */
-    .funcs-summary-card {
+    /* Validação Experimental do Desenvolvimento & Conclusão */
+    .validation-card {
       background: rgba(15, 23, 42, 0.85);
-      border: 1px solid var(--card-border);
+      border: 1px solid rgba(52, 211, 153, 0.25);
       border-radius: 12px;
-      padding: 12px 18px;
+      padding: 10px 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
     }
 
-    .funcs-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .validation-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .func-mini-box {
-      background: rgba(11, 15, 25, 0.7);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 12px;
-    }
-
-    .func-mini-box.accent {
-      border-color: rgba(251, 191, 36, 0.3);
-    }
-
-    .func-mini-header {
-      font-family: var(--mono);
+    .validation-title {
+      font-size: 13px;
       font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-    }
-
-    .func-mini-box.accent .func-mini-header {
-      color: var(--accent);
-    }
-
-    .func-mini-desc {
-      color: #CBD5E1;
-      line-height: 1.45;
-      font-size: 11.5px;
-    }
-
-    .validation-strip {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(52, 211, 153, 0.08);
-      border: 1px solid rgba(52, 211, 153, 0.3);
-      border-radius: 8px;
-      padding: 8px 14px;
-      font-size: 12px;
-      color: #E2E8F0;
-    }
-
-    .validation-strip b {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--success);
-    }
-
-    /* Barra Inferior com Roteiro e Ações */
-    footer {
-      padding: 12px 36px;
-      background: #080D18;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .btn-action {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: #FFF;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: var(--sans);
-      transition: all 0.2s ease;
-      display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-action:hover {
-      background: var(--primary);
-      color: #000;
-      border-color: var(--primary);
-    }
-
-    /* Modal de Roteiro de Fala */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
-      display: none;
-      justify-content: center;
+    .metric-chips {
+      display: flex;
+      gap: 8px;
       align-items: center;
-      z-index: 100;
+      flex-wrap: wrap;
     }
 
-    .modal-card {
-      background: #151D2E;
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      width: 90%;
-      max-width: 720px;
-      padding: 28px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-      position: relative;
+    .chip {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: var(--sans);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .modal-card h2 {
-      font-size: 20px;
-      color: var(--primary);
-      margin-bottom: 16px;
+    .chip-score {
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      color: #A7F3D0;
     }
 
-    .speech-step {
-      margin-bottom: 14px;
+    .chip-score b { color: var(--success); }
+
+    .chip-bonus {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #BAE6FD;
+    }
+
+    .chip-bonus b { color: var(--primary); }
+
+    .chip-nan {
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      color: #FDE68A;
+    }
+
+    .chip-nan b { color: var(--accent); }
+
+    .validation-conclusion {
       font-size: 13.5px;
+      color: #CBD5E1;
       line-height: 1.5;
     }
 
-    .speech-step b {
-      color: var(--accent);
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 18px; right: 18px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 20px;
-      cursor: pointer;
+    .validation-conclusion b {
+      color: var(--success);
     }
 
     /* Otimização de Impressão para PDF */
     @media print {
       body { background: #FFF !important; padding: 0 !important; color: #000 !important; }
       .slide-wrapper { max-width: 100% !important; border: none !important; box-shadow: none !important; }
-      .btn-action, .tabs-nav { display: none !important; }
+      .tabs-nav { display: none !important; }
     }
   </style>
 </head>
@@ -516,59 +553,70 @@
         Desafio 2 — Redes Neurais Profundas de 48 Camadas
         <span class="badge-sub">GBC073 Inteligência Computacional</span>
       </h1>
-      <p>Desenvolvimento das funções de ativação e inicialização para preservação de sinal (FACOM / UFU)</p>
     </div>
     <div class="authors-box">
       <div class="authors-names">Matheus Dantas & Vanessa Dias</div>
-      <div class="authors-sub">Apresentação Oral (4 minutos)</div>
     </div>
   </header>
 
   <!-- Corpo do Slide -->
   <div class="slide-body">
 
-    <!-- Coluna Esquerda: A Jornada de Descoberta e Teoria -->
+    <!-- Coluna Esquerda: Abertura, Teoria e Experimentos de Desenvolvimento -->
     <div class="col-left">
 
-      <!-- Card 1: A Função ativacao(x) e a Teoria de Propagação -->
+      <!-- Card 1: O Desafio das 48 Camadas & Dedução Teórica -->
       <div class="card">
         <div class="card-title blue">
-          <span>📐</span> 1. Função ativacao(x) — Escolha & Dinâmica Analítica
+          1. O Desafio das 48 Camadas & Dedução Teórica
+        </div>
+
+        <div class="regime-banner">
+          <div class="regime-line">
+            <span class="regime-tag">Regime Severo</span>
+            <span>48 Camadas Lineares <b>sem BatchNorm</b> e <b>sem ResNet</b></span>
+          </div>
+          <div class="regime-sub">
+            Multiplicador sucessivo: $\mathrm{Var}(z_{48}) = \gamma^{48} \cdot \mathrm{Var}(z_0)$ &nbsp;•&nbsp; 
+            $\gamma < 1 \to 10^{-33}$ (Vanishing) &nbsp;•&nbsp; 
+            $\gamma > 1 \to 10^{35}$ (NaN) &nbsp;•&nbsp; 
+            <b style="color: var(--primary);">Meta: $\gamma \equiv 1.00$</b>
+          </div>
         </div>
         
         <div class="formula-box">
           <div class="formula-line">
-            <span>Implementação:</span>
-            <b>def ativacao(x): return torch.tanh(x)</b>
+            <span>Conservação de Variância:</span>
+            <span class="formula-math">$\mathrm{Var}(z') = \mathrm{fan\_in} \cdot s^2 \cdot \mathbb{E}[f(z)^2] = 1$</span>
           </div>
           <div class="formula-line">
-            <span>Derivada analítica:</span>
-            <b>f'(z) = 1 - tanh²(z) ≈ 1.0 (para |z| &lt; 0.2)</b>
+            <span>Ganho Calibrado ($f = \tanh$):</span>
+            <span class="formula-math highlight">$s = \sqrt{\frac{1.05}{\mathrm{fan\_in}}}$</span>
           </div>
         </div>
 
         <ul class="theory-list">
           <li>
-            <span><b>Simetria Ímpar Rigorosa:</b> $\mathbb{E}[\tanh(z)] = 0$. Em 48 camadas, ReLU e LeakyReLU acumulam médias positivas, deslocando a ativação. A $\tanh$ garante média zero perfeita do início ao fim.</span>
+            <span><b>Simetria Ímpar ($\mathbb{E}[\tanh(z)] = 0$):</b> ReLU e LeakyReLU acumulam viés positivo ao longo de 48 camadas (*mean drift*). A $\tanh$ elimina qualquer desvio de média em profundidade.</span>
           </li>
           <li>
-            <span><b>Condutor Perfeito de Gradiente:</b> Como as pré-ativações são mantidas com baixa variância ($\approx 0.03$), operamos na região onde $\tanh(z) \approx z$ e $f'(z) \approx 1$, conduzindo o autograd intacto no backward pass sem saturação.</span>
+            <span><b>Quase-Linearidade & Fator $1.05$:</b> Na faixa $|z| < 0.2$, $\tanh(z) \approx z$ e $\tanh'(z) \approx 1.0$. O ganho $1.05$ compensa a curvatura das caudas da distribuição normal, mantendo $\mathrm{Var}(z) \approx 0.03$.</span>
           </li>
         </ul>
       </div>
 
-      <!-- Card 2: A Engenharia da Função inicializar(...) -->
+      <!-- Card 2: Desenvolvimento Empírico: Testes de Sala -->
       <div class="card" style="flex: 1; display: flex; flex-direction: column;">
         <div class="card-title yellow">
-          <span>⚙️</span> 2. Função inicializar() — Raciocínio & Desenvolvimento
+          2. Desenvolvimento Empírico: Testes de Sala
         </div>
 
         <div class="tabs-nav">
-          <button class="tab-btn" onclick="mostrarExp(0)">1. fan_in</button>
-          <button class="tab-btn" onclick="mostrarExp(1)">2. Ganho 1.05</button>
-          <button class="tab-btn" onclick="mostrarExp(2)">3. Bias Zero</button>
-          <button class="tab-btn" onclick="mostrarExp(3)">4. Ajuste L=4</button>
-          <button class="tab-btn active" onclick="mostrarExp(4)">5. In-Place</button>
+          <button class="tab-btn" onclick="mostrarExp(0)">1. Zeros</button>
+          <button class="tab-btn" onclick="mostrarExp(1)">2. Uniforme</button>
+          <button class="tab-btn" onclick="mostrarExp(2)">3. Grande</button>
+          <button class="tab-btn" onclick="mostrarExp(3)">4. Sem fan_in</button>
+          <button class="tab-btn active" onclick="mostrarExp(4)">5. Tanh Calibrada</button>
         </div>
 
         <div id="exp-box" class="exp-content">
@@ -586,8 +634,8 @@
           <h3>Raio-X: Variância da Pré-ativação por Camada (L = 1 .. 48)</h3>
           <div class="legend-group">
             <div class="legend-item"><div class="dot dot-target"></div> Meta (Var = 1)</div>
-            <div class="legend-item"><div class="dot dot-base"></div> Baseline tanh (some)</div>
-            <div class="legend-item"><div class="dot dot-nossa"></div> Nossa Solução</div>
+            <div class="legend-item"><div class="dot dot-nossa"></div> Nossa Solução (Tanh Calibrada)</div>
+            <div class="legend-item" id="legend-exp-item"><div class="dot" id="legend-exp-dot" style="background: #34D399;"></div> <span id="legend-exp-txt">Teste Ativo: 5. Tanh Calibrada (Ideal)</span></div>
           </div>
         </div>
 
@@ -620,47 +668,40 @@
             <!-- Faixa Ideal Sombreada -->
             <rect x="50" y="55" width="630" height="30" fill="rgba(52, 211, 153, 0.08)" rx="4" />
 
-            <!-- Curva 1: Baseline (Vanishing Gradient -> cai de 70 até 220) -->
-            <path d="M 50 78 L 100 95 L 170 120 L 250 148 L 365 185 L 500 205 L 680 220" class="curve-base" />
+            <!-- Curva Dinâmica do Teste Selecionado -->
+            <path id="curve-exp" d="" stroke="#F87171" stroke-width="3" fill="none" style="transition: d 0.25s ease, stroke 0.25s ease;" />
 
-            <!-- Curva 2: Nossa Solução (Perfeita estabilidade ao redor de 10^0 = 70) -->
-            <path d="M 50 63 L 100 66 L 170 65 L 250 67 L 365 64 L 500 66 L 650 65 L 680 68" class="curve-nossa" />
+            <!-- Curva de Referência Permanente: Nossa Solução -->
+            <path id="curve-nossa" d="M 50.0 69.8 L 63.4 72.3 L 76.8 73.3 L 90.2 73.9 L 103.6 74.3 L 117.0 74.7 L 130.4 75.0 L 143.8 75.3 L 157.2 75.5 L 170.6 75.8 L 184.0 76.0 L 197.4 76.1 L 210.9 76.2 L 224.3 76.4 L 237.7 76.5 L 251.1 76.5 L 264.5 76.6 L 277.9 76.7 L 291.3 76.8 L 304.7 76.8 L 318.1 76.8 L 331.5 76.9 L 344.9 77.0 L 358.3 77.0 L 371.7 77.0 L 385.1 77.1 L 398.5 77.0 L 411.9 77.1 L 425.3 77.2 L 438.7 77.3 L 452.1 77.2 L 465.5 77.4 L 478.9 77.5 L 492.3 77.6 L 505.7 77.7 L 519.1 77.8 L 532.6 77.9 L 546.0 78.0 L 559.4 78.0 L 572.8 78.0 L 586.2 78.2 L 599.6 78.1 L 613.0 78.2 L 626.4 78.0 L 639.8 78.0 L 653.2 78.0 L 666.6 78.0 L 680.0 77.6" class="curve-nossa" />
 
-            <!-- Marcadores Interativos na Curva da Nossa Solução -->
-            <circle cx="50" cy="63" r="4" fill="#34D399" />
-            <circle cx="210" cy="65" r="4" fill="#34D399" />
-            <circle cx="365" cy="64" r="4" fill="#34D399" />
-            <circle cx="520" cy="66" r="4" fill="#34D399" />
-            <circle cx="680" cy="68" r="4" fill="#34D399" />
+            <!-- Marcadores na Curva da Nossa Solução -->
+            <circle cx="50" cy="70" r="4" fill="#34D399" />
+            <circle cx="197" cy="76" r="4" fill="#34D399" />
+            <circle cx="358" cy="77" r="4" fill="#34D399" />
+            <circle cx="519" cy="78" r="4" fill="#34D399" />
+            <circle cx="680" cy="78" r="4" fill="#34D399" />
+
+            <!-- Badge Flutuante no Gráfico do Teste Ativo -->
+            <g id="badge-exp-group" filter="drop-shadow(0 2px 6px rgba(0,0,0,0.8))">
+              <rect id="badge-exp-bg" x="430" y="28" width="240" height="24" rx="5" fill="#0B0F19" stroke="#34D399" stroke-width="1.5" />
+              <text id="badge-exp-txt" x="442" y="44" fill="#34D399" font-size="10.5" font-weight="700" font-family="var(--sans)">Região Linear Preservada (≈ 0.03)</text>
+            </g>
           </svg>
         </div>
       </div>
 
-      <!-- Painel das Funções e Validação Técnica -->
-      <div class="funcs-summary-card">
-        <div class="funcs-row">
-          <div class="func-mini-box">
-            <div class="func-mini-header">
-              <span>ativacao(x)</span>
-              <span style="font-size: 10px; color: var(--primary);">Element-wise</span>
-            </div>
-            <div class="func-mini-desc">
-              Não-linearidade pura sem parâmetros e sem dependência de lote. Preserva gradientes por autograd e impede explosão numérica com envelope limitado em (-1, 1).
-            </div>
-          </div>
-          <div class="func-mini-box accent">
-            <div class="func-mini-header">
-              <span>inicializar(...)</span>
-              <span style="font-size: 10px; color: var(--accent);">@torch.no_grad</span>
-            </div>
-            <div class="func-mini-desc">
-              Calcula <code>s = sqrt(1.05 / fan_in)</code>. Modifica tensores in-place com <code>W.normal_(0, s)</code> e <code>b.zero_()</code> sem alocar grafos extras.
-            </div>
+      <!-- 3. Validação Experimental do Desenvolvimento & Conclusão -->
+      <div class="validation-card">
+        <div class="validation-header">
+          <span class="validation-title">3. Validação Experimental do Desenvolvimento</span>
+          <div class="metric-chips">
+            <span class="chip chip-score"><b>Convergência Estável</b> em 48 Camadas</span>
+            <span class="chip chip-bonus"><b>Superação Consistente</b> da Referência</span>
+            <span class="chip chip-nan"><b>Zero NaNs</b> / Divergências</span>
           </div>
         </div>
-        <div class="validation-strip">
-          <span><b>Validação Técnica:</b> Variância preservada em ~0.03 ao longo das 48 camadas sem BatchNorm nem ResNet.</span>
-          <span style="font-family: var(--mono); color: var(--success); font-weight: 700;">Convergência 100%</span>
+        <div class="validation-conclusion">
+          <b>Conclusão:</b> A calibração rigorosa de ganho ($1.05$) aliada à simetria ímpar da $\tanh$ comprova: é perfeitamente viável propagar sinal e gradiente intactos por 48 camadas sem necessidade de BatchNorm ou conexões residuais.
         </div>
       </div>
 
@@ -668,74 +709,76 @@
 
   </div>
 
-  <!-- Rodapé do Slide -->
-  <footer>
-    <span>Pressione <b>F11</b> para tela cheia na apresentação.</span>
-    <div style="display: flex; gap: 10px;">
-      <button class="btn-action" onclick="abrirModal()">🎤 Roteiro de Fala (4 min)</button>
-      <button class="btn-action" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
-    </div>
-  </footer>
-
-</div>
-
-<!-- Modal com o Roteiro de Fala em 4 Minutos -->
-<div class="modal-overlay" id="modal-speech" onclick="fecharModal(event)">
-  <div class="modal-card">
-    <button class="close-btn" onclick="fecharModalDirect()">✕</button>
-    <h2>Roteiro de Apresentação Oral (4 Minutos — Foco em Funções)</h2>
-    
-    <div class="speech-step">
-      <b>Pessoa 1 (0:00 - 1:55) — O Desafio & A Função ativacao(x):</b><br>
-      • <i>Contexto:</i> Treinar 48 camadas sem normalização nem ResNet exige ganho de variância rigorosamente unitário por camada.<br>
-      • <i>Por que não ReLU?</i> Gera médias positivas crescentes, desviando as pré-ativações em cascata.<br>
-      • <i>A Função ativacao(x):</i> Retorna <code>torch.tanh(x)</code>. Por ser ímpar, garante média zero estrita. No regime de baixa amplitude (|z| &lt; 0.2), sua derivada é unitária (1 - tanh²(z) ≈ 1), mantendo o fluxo do autograd sem atenuação.
-    </div>
-
-    <div class="speech-step">
-      <b>Pessoa 2 (1:55 - 3:50) — A Engenharia da inicializar(...) & Validação:</b><br>
-      • <i>Estrutura PyTorch:</i> <code>@torch.no_grad()</code> com mutações in-place (<code>W.normal_</code> e <code>b.zero_</code>) sem overhead de grafo.<br>
-      • <i>Cálculo do Desvio:</i> Divisão por <code>sqrt(fan_in)</code> para neutralizar a soma interna dos neurônios, com ganho 1.05 para compensar as caudas gaussianas.<br>
-      • <i>Ajuste L=4:</i> Expansão de logits (1.5x) para rápida separabilidade no Softmax em redes rasas.<br>
-      • <i>Gráfico & Conclusão:</i> Curva verde no Raio-X demonstra estabilidade física perfeita por 48 camadas, confirmando o sucesso da engenharia das funções.
-    </div>
-  </div>
 </div>
 
 <script>
-  // Dados de Engenharia e Desenvolvimento da Função inicializar()
+  // Dados dos experimentos de sala para a navegação interativa
   const experimentos = [
     {
-      titulo: "1. Compensação Dimensional (fan_in)",
-      status: "Fórmula: s ∝ 1 / √fan_in",
-      badge: "badge-ok",
-      texto: "<b>Como foi feito:</b> Cada pré-ativação é uma soma z = ∑ W_i a_i. A variância da soma cresce proporcionalmente ao fan_in.<br><b>Por que é vital:</b> Dividir por √fan_in equaliza datasets distintos: MNIST tem 784 entradas, CIFAR tem 3072 e camadas internas têm 256. Sem fan_in, a rede descalibra imediatamente."
+      titulo: "1. Inicializar Tudo com Zero ($W = 0, b = 0$)",
+      status: "Falha de Simetria (Acc = 12.6%)",
+      badge: "badge-fail",
+      texto: "<b>O que aconteceu:</b> $\\mathrm{Var}(z) = 0$ e gradientes $\\nabla W = 0$ em todas as camadas ocultas.<br><b>Diagnóstico:</b> Sem aleatoriedade, $\\frac{\\partial \\mathcal{L}}{\\partial W_{ij}} = \\delta_i \\cdot x_j$ é idêntico para todos os neurônios, impedindo a quebra de simetria (256 neurônios agem como apenas 1).",
+      codigo: `<span class="kw">def</span> <span class="fn">ativacao</span>(x): <span class="kw">return</span> torch.relu(x)
+<span class="kw">def</span> <span class="fn">inicializar</span>(W, b, fan_in, fan_out, camada, n_camadas):
+    W.zero_()  <span class="com"># simetria não é quebrada</span>
+    b.zero_()`
     },
     {
-      titulo: "2. Calibração do Ganho (Fator 1.05)",
-      status: "s = √(1.05 / fan_in)",
-      badge: "badge-ok",
-      texto: "<b>Como foi feito:</b> Embora tanh(z) ≈ z na origem, as caudas da distribuição normal ultrapassam levemente |z| > 0.2, onde a curvatura reduz a energia.<br><b>Solução:</b> Introduzimos um ganho de 5% (fator 1.05 no numerador) para compensar analiticamente a leve saturação, mantendo Var(z) ≈ 0.03 constante por 48 camadas."
+      titulo: "2. Uniforme Pequena $\\mathcal{U}(-0.05, 0.05)$ com Tanh (Baseline)",
+      status: "Vanishing: Var cai para 10⁻³³",
+      badge: "badge-fail",
+      texto: "<b>O que aconteceu:</b> Fator multiplicativo por camada $\\gamma \\approx 0.08$. Em 48 camadas, $(0.08)^{48} \\approx 10^{-33}$.<br><b>Diagnóstico:</b> Gradiente na camada 1 é $\\approx 10^{-16}$ (<i>Vanishing Gradient</i> puro: o sinal colapsa e as primeiras camadas não aprendem).",
+      codigo: `<span class="kw">def</span> <span class="fn">ativacao</span>(x): <span class="kw">return</span> torch.tanh(x)
+<span class="kw">def</span> <span class="fn">inicializar</span>(W, b, fan_in, fan_out, camada, n_camadas):
+    W.uniform_(-<span class="num">0.05</span>, <span class="num">0.05</span>)  <span class="com"># fator ≈ 0.08 -> vanishing</span>
+    b.zero_()`
     },
     {
-      titulo: "3. Bias Rigorosamente Nulo (b.zero_())",
-      status: "E[b] = 0 (Sem viés)",
-      badge: "badge-ok",
-      texto: "<b>Como foi feito:</b> Forçamos b.zero_() em todas as camadas.<br><b>Por que é vital:</b> A quebra de simetria já é realizada com perfeição pela amostragem normal de W. Qualquer bias diferente de zero deslocaria o centro das ativações para fora da origem, destruindo a simetria ímpar da tanh."
+      titulo: "3. Variância Grande $\\mathcal{N}(0, 0.2^2)$ com ReLU",
+      status: "Exploding: Fura teto 10¹⁰ -> 10³⁵ (NaN)",
+      badge: "badge-fail",
+      texto: "<b>O que aconteceu:</b> Multiplicação por $\\gamma \\approx 5.12$ por camada. Fura o teto de $10^{10}$ na camada 14 e atinge $10^{35}$ na camada 48.<br><b>Diagnóstico:</b> <i>Exploding Gradient</i>. Valores estouram float32 ($3.4 \\times 10^{38}$), gerando $\\mathrm{NaN}$ logo no 1º lote de treino.",
+      codigo: `<span class="kw">def</span> <span class="fn">ativacao</span>(x): <span class="kw">return</span> torch.relu(x)
+<span class="kw">def</span> <span class="fn">inicializar</span>(W, b, fan_in, fan_out, camada, n_camadas):
+    W.normal_(<span class="num">0.0</span>, <span class="num">0.2</span>)  <span class="com"># fator ≈ 5.12 -> exploding (NaN)</span>
+    b.zero_()`
     },
     {
-      titulo: "4. Tratamento Especial para Redes Curtas (L=4)",
-      status: "desvio *= 1.5 (Saída)",
-      badge: "badge-ok",
-      texto: "<b>Como foi feito:</b> Em L=4 não há risco de desvanecimento. No entanto, se os logits da última camada forem muito pequenos, o Softmax tem baixa confiança e a convergência inicial é lenta.<br><b>Solução:</b> Multiplicamos o desvio da camada final por 1.5x (CIFAR) ou usamos fator 1.35 (MNIST) para separabilidade imediata de classes."
+      titulo: "4. Escala Fixa sem Considerar $\\mathrm{fan\\_in}$",
+      status: "Desbalanço Dimensional (Acc = 14%)",
+      badge: "badge-fail",
+      texto: "<b>O que aconteceu:</b> Usar desvio fixo constante (ex: $\\sigma = 0.08$) desestabiliza a escala entre diferentes tarefas.<br><b>Diagnóstico:</b> MNIST tem 784 entradas, CIFAR tem 3072 e camadas ocultas têm 256. Ignorar $\\mathrm{fan\\_in}$ quebra a adaptação entre datasets.",
+      codigo: `<span class="kw">def</span> <span class="fn">ativacao</span>(x): <span class="kw">return</span> torch.relu(x)
+<span class="kw">def</span> <span class="fn">inicializar</span>(W, b, fan_in, fan_out, camada, n_camadas):
+    W.normal_(<span class="num">0.0</span>, <span class="num">0.08</span>)  <span class="com"># desvio fixo ignora dimensão da entrada</span>
+    b.zero_()`
     },
     {
-      titulo: "5. Mutação In-Place e Eficiência (@torch.no_grad)",
-      status: "W.normal_() e b.zero_()",
+      titulo: "5. Tanh com Ganho Calibrado (Nossa Solução)",
+      status: "Estabilidade Total (Var ≈ 0.03)",
       badge: "badge-ok",
-      texto: "<b>Como foi feito:</b> O decorador @torch.no_grad() desativa a construção do grafo de gradientes durante a montagem.<br><b>Por que é vital:</b> Os métodos terminados em underline operam in-place diretamente nos blocos de memória alocados pelo modelo, sem reatribuição local de variáveis e sem overhead de memória."
+      texto: "<b>O que aconteceu:</b> Variância preservada em $\\approx 0.03$ e média identicamente nula em todas as 48 camadas.<br><b>Diagnóstico:</b> Simetria ímpar da tanh anula o desvio de viés. Na faixa linear ($|z| < 0.2$), $\\tanh'(z) \\approx 1.0$, garantindo fluxo íntegro de sinal e gradiente.",
+      codigo: `<span class="kw">def</span> <span class="fn">ativacao</span>(x): <span class="kw">return</span> torch.tanh(x)
+<span class="kw">def</span> <span class="fn">inicializar</span>(W, b, fan_in, fan_out, camada, n_camadas):
+    desvio = math.sqrt(<span class="num">1.05</span> / fan_in)  <span class="com"># numerador 1.05 compensa curvatura da tanh</span>
+    W.normal_(<span class="num">0.0</span>, desvio)
+    b.zero_()`
     }
   ];
+
+  function renderAllMath(target) {
+    const el = target || document.body;
+    if (typeof renderMathInElement === 'function') {
+      renderMathInElement(el, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }
 
   function mostrarExp(idx) {
     const exp = experimentos[idx];
@@ -746,30 +789,121 @@
         <span class="badge-status ${exp.badge}">${exp.status}</span>
       </div>
       <div>${exp.texto}</div>
+      <div class="code-label">Trecho de Código no Teste:</div>
+      <pre class="exp-code"><code>${exp.codigo}</code></pre>
     `;
 
     document.querySelectorAll(".tab-btn").forEach((btn, i) => {
       btn.classList.toggle("active", i === idx);
     });
+
+    atualizarGrafico(idx);
+    renderAllMath(box);
   }
 
-  // Inicializa a primeira tab
-  mostrarExp(4);
+  // Trajetórias e metadados de variância das 48 camadas para cada teste
+  const expGraficos = [
+    {
+      // 1. Zeros (todas camadas com variância 0 -> piso y=225)
+      path: "M 50.0 225.0 L 63.4 225.0 L 76.8 225.0 L 90.2 225.0 L 103.6 225.0 L 117.0 225.0 L 130.4 225.0 L 143.8 225.0 L 157.2 225.0 L 170.6 225.0 L 184.0 225.0 L 197.4 225.0 L 210.9 225.0 L 224.3 225.0 L 237.7 225.0 L 251.1 225.0 L 264.5 225.0 L 277.9 225.0 L 291.3 225.0 L 304.7 225.0 L 318.1 225.0 L 331.5 225.0 L 344.9 225.0 L 358.3 225.0 L 371.7 225.0 L 385.1 225.0 L 398.5 225.0 L 411.9 225.0 L 425.3 225.0 L 438.7 225.0 L 452.1 225.0 L 465.5 225.0 L 478.9 225.0 L 492.3 225.0 L 505.7 225.0 L 519.1 225.0 L 532.6 225.0 L 546.0 225.0 L 559.4 225.0 L 572.8 225.0 L 586.2 225.0 L 599.6 225.0 L 613.0 225.0 L 626.4 225.0 L 639.8 225.0 L 653.2 225.0 L 666.6 225.0 L 680.0 225.0",
+      cor: "#94A3B8",
+      dash: "5 4",
+      legenda: "Teste Ativo: 1. Zeros (Var = 0, Travado)",
+      badgeTxt: "Var = 0 (Sem Ativação · Simetria Travada)",
+      badgeX: 220, badgeY: 130, badgeW: 260, badgeH: 24,
+      badgeTxtX: 232, badgeTxtY: 146,
+      badgeBg: "#0B0F19"
+    },
+    {
+      // 2. Uniforme Pequena com Tanh (Baseline) -> Vanishing cai até 10⁻³³
+      path: "M 50.0 70.8 L 63.4 76.4 L 76.8 80.0 L 90.2 83.3 L 103.6 86.8 L 117.0 90.1 L 130.4 93.5 L 143.8 96.8 L 157.2 100.1 L 170.6 103.5 L 184.0 106.8 L 197.4 110.2 L 210.9 113.6 L 224.3 117.0 L 237.7 120.5 L 251.1 123.8 L 264.5 127.1 L 277.9 130.4 L 291.3 133.8 L 304.7 137.1 L 318.1 140.5 L 331.5 143.8 L 344.9 147.2 L 358.3 150.5 L 371.7 153.8 L 385.1 157.2 L 398.5 160.6 L 411.9 163.9 L 425.3 167.3 L 438.7 170.6 L 452.1 174.0 L 465.5 177.4 L 478.9 180.8 L 492.3 184.2 L 505.7 187.6 L 519.1 190.9 L 532.6 194.3 L 546.0 197.6 L 559.4 200.9 L 572.8 204.4 L 586.2 207.9 L 599.6 211.3 L 613.0 214.7 L 626.4 218.0 L 639.8 221.4 L 653.2 224.8 L 666.6 225.0 L 680.0 225.0",
+      cor: "#F87171",
+      dash: "none",
+      legenda: "Teste Ativo: 2. Baseline Tanh (Vanishing)",
+      badgeTxt: "Vanishing Gradient (Var -> 10⁻³³)",
+      badgeX: 430, badgeY: 28, badgeW: 240, badgeH: 24,
+      badgeTxtX: 442, badgeTxtY: 44,
+      badgeBg: "#0B0F19"
+    },
+    {
+      // 3. Variância Grande -> Exploding sobe até furar o teto (> 10¹⁰) e chega a 10³⁵
+      path: "M 50.0 62.5 L 63.4 58.8 L 76.8 55.1 L 90.2 51.2 L 103.6 47.8 L 117.0 44.2 L 130.4 40.5 L 143.8 37.5 L 157.2 33.7 L 170.6 29.6 L 184.0 26.2 L 197.4 22.3 L 210.9 18.0 L 224.3 6.0 L 235.0 2.0 L 680.0 2.0",
+      cor: "#FB923C",
+      dash: "none",
+      legenda: "Teste Ativo: 3. Variância Grande (Fura teto 10¹⁰ → 10³⁵ / NaN)",
+      badgeTxt: "Fura o teto (> 10¹⁰ na cam. 14) → atinge 10³⁵ na cam. 48 (NaN)",
+      badgeX: 230, badgeY: 130, badgeW: 380, badgeH: 24,
+      badgeTxtX: 240, badgeTxtY: 146,
+      badgeBg: "#0B0F19"
+    },
+    {
+      // 4. Sem fan_in -> desbalanço por ignorar dimensão de entrada
+      path: "M 50.0 66.5 L 63.4 66.8 L 76.8 67.0 L 90.2 67.2 L 103.6 67.7 L 117.0 68.2 L 130.4 68.3 L 143.8 69.3 L 157.2 69.5 L 170.6 69.5 L 184.0 69.9 L 197.4 70.0 L 210.9 70.8 L 224.3 71.0 L 237.7 71.5 L 251.1 72.1 L 264.5 72.2 L 277.9 72.2 L 291.3 72.7 L 304.7 73.2 L 318.1 72.8 L 331.5 73.4 L 344.9 73.8 L 358.3 74.2 L 371.7 74.2 L 385.1 74.5 L 398.5 75.2 L 411.9 76.0 L 425.3 76.5 L 438.7 76.2 L 452.1 76.7 L 465.5 77.6 L 478.9 77.9 L 492.3 78.0 L 505.7 78.8 L 519.1 79.1 L 532.6 79.6 L 546.0 79.6 L 559.4 79.8 L 572.8 80.0 L 586.2 80.5 L 599.6 80.8 L 613.0 81.7 L 626.4 81.8 L 639.8 82.3 L 653.2 83.2 L 666.6 83.7 L 680.0 84.0",
+      cor: "#C084FC",
+      dash: "none",
+      legenda: "Teste Ativo: 4. Sem fan_in (Desbalanço)",
+      badgeTxt: "Desbalanço de Escala (10⁻²·⁸)",
+      badgeX: 430, badgeY: 130, badgeW: 240, badgeH: 24,
+      badgeTxtX: 442, badgeTxtY: 146,
+      badgeBg: "#0B0F19"
+    },
+    {
+      // 5. Tanh Calibrada (Nossa Solução) -> preservação linear ideal
+      path: "",
+      cor: "#34D399",
+      dash: "none",
+      legenda: "Teste Ativo: 5. Tanh Calibrada (Ideal)",
+      badgeTxt: "Região Linear Preservada (≈ 0.03)",
+      badgeX: 430, badgeY: 28, badgeW: 240, badgeH: 24,
+      badgeTxtX: 442, badgeTxtY: 44,
+      badgeBg: "#0B0F19"
+    }
+  ];
 
-  // Controle do Modal
-  function abrirModal() {
-    document.getElementById("modal-speech").style.display = "flex";
-  }
+  function atualizarGrafico(idx) {
+    const curExp = expGraficos[idx];
+    const pathEl = document.getElementById("curve-exp");
+    const badgeEl = document.getElementById("badge-exp-txt");
+    const badgeBox = document.getElementById("badge-exp-bg");
+    const legDot = document.getElementById("legend-exp-dot");
+    const legTxt = document.getElementById("legend-exp-txt");
 
-  function fecharModal(e) {
-    if (e.target.id === "modal-speech") {
-      document.getElementById("modal-speech").style.display = "none";
+    legDot.style.background = curExp.cor;
+    legTxt.textContent = curExp.legenda;
+
+    badgeBox.setAttribute("x", curExp.badgeX);
+    badgeBox.setAttribute("y", curExp.badgeY);
+    badgeBox.setAttribute("width", curExp.badgeW);
+    badgeBox.setAttribute("height", curExp.badgeH || "24");
+    badgeBox.setAttribute("fill", curExp.badgeBg);
+    badgeBox.setAttribute("stroke", curExp.cor);
+    badgeBox.setAttribute("stroke-width", "1.5");
+
+    badgeEl.setAttribute("x", curExp.badgeTxtX);
+    badgeEl.setAttribute("y", curExp.badgeTxtY);
+    badgeEl.setAttribute("fill", curExp.cor);
+    badgeEl.textContent = curExp.badgeTxt;
+
+    if (idx === 4) {
+      pathEl.style.display = "none";
+    } else {
+      pathEl.style.display = "block";
+      pathEl.setAttribute("d", curExp.path);
+      pathEl.setAttribute("stroke", curExp.cor);
+      pathEl.setAttribute("stroke-dasharray", curExp.dash);
     }
   }
 
-  function fecharModalDirect() {
-    document.getElementById("modal-speech").style.display = "none";
-  }
+  // Inicializa a primeira tab e renderiza fórmulas
+  document.addEventListener("DOMContentLoaded", () => {
+    mostrarExp(4);
+    renderAllMath();
+  });
+  window.addEventListener("load", () => {
+    renderAllMath();
+  });
+
+
 </script>
 
 </body>
