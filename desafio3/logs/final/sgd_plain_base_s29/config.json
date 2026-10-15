@@ -1,0 +1,64 @@
+{
+  "config": {
+    "optimizer": "sgd_plain",
+    "lr": 0.03162277660168379,
+    "schedule": "constant",
+    "seed": 29,
+    "steps": 2400,
+    "batch_size": 128,
+    "log_every": 20,
+    "weight_decay": 0.01,
+    "clip_norm": 5.0,
+    "aux_lr": 0.001,
+    "warmup_fraction": 0.1,
+    "min_lr_factor": 0.01
+  },
+  "run_id": "sgd_plain_base_s29",
+  "phase": "sgd_plain_base",
+  "hypothesis": "SGD sem momento como referência básica; taxa escolhida só na validação",
+  "source_sha256": "bde9b5ad5a3ec57ad900efecd205451e659a421d25bc28f1871b1fb6b6611eb2",
+  "core_sha256": "ae4aba15df453a7983f2e5cf84efa82b8966fb912b4793e28d6afec7fcfa330d",
+  "data_sha256": "ad85d6c6e9d8b8183ab60a1698932fff52c79e9ee56ff26bab25a8d66eca6157",
+  "dataset_npz_sha256": "2849e6415d142028a3f9cc9fbff3c637e2d961e8b5ba465f9c92862f703c19f2",
+  "initial_parameters_sha256": "4445a9de5bec3ea643d407a38407d48cb10ad5b19b0b4789948191acc9861b25",
+  "batch_order_sha256": "bf0827ba88e89ac4ec64819088d4f8226897c10c7daa7a6b198cf3af44f82d24",
+  "torch": "2.14.0+cpu",
+  "numpy": "2.5.3",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "threads": 1,
+  "device": "cpu",
+  "created_utc": "2026-10-12T20:50:16.867540+00:00",
+  "command": "python \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\03_codigo\\sgd_referencia.py\" --replay \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\04_resultados\\rodada_duracao_completa\\protocolo_final\\logs\\sgd_plain_base_s29\\config.json\" --out \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\04_resultados\\rodada_duracao_completa\\protocolo_final\" --run-id \"sgd_plain_base_s29_replica\"",
+  "metric_selection": "MAE da validação no último passo; sem early stopping",
+  "parameter_count": 3585,
+  "optimizer_groups": [
+    {
+      "class": "SGD",
+      "groups": [
+        {
+          "weight_decay": 0.01,
+          "lr": 0.03162277660168379,
+          "momentum": 0.0,
+          "dampening": 0,
+          "nesterov": false,
+          "maximize": false,
+          "foreach": null,
+          "differentiable": false,
+          "fused": null
+        },
+        {
+          "weight_decay": 0.0,
+          "lr": 0.03162277660168379,
+          "momentum": 0.0,
+          "dampening": 0,
+          "nesterov": false,
+          "maximize": false,
+          "foreach": null,
+          "differentiable": false,
+          "fused": null
+        }
+      ]
+    }
+  ]
+}

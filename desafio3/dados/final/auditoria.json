@@ -1,0 +1,19 @@
+{
+  "data_sha256": "ad85d6c6e9d8b8183ab60a1698932fff52c79e9ee56ff26bab25a8d66eca6157",
+  "source_audit_sha256": "1761def3516359c4028b72b18f9cb58e4b112f51259c3299c2874792f5bb35bf",
+  "n_features": 44,
+  "splits": {
+    "train": {
+      "n": 35470,
+      "date_min": "1920-01-01",
+      "date_max": "2020-12-30"
+    },
+    "val": {
+      "n": 1272,
+      "date_min": "2021-01-01",
+      "date_max": "2022-12-30"
+    }
+  },
+  "filter": "Excluir antes da divisão se runtime não for finito ou for <= 0",
+  "test_not_used_for_selection": true
+}
