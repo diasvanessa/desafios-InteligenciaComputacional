@@ -1,0 +1,27 @@
+{
+  "method": "repeticao deterministica, com os mesmos pesos iniciais, dados, lotes e otimizador",
+  "original_run_id": "sgd_plain_lr_0p1",
+  "original_source_sha256": "bde9b5ad5a3ec57ad900efecd205451e659a421d25bc28f1871b1fb6b6611eb2",
+  "replay_source_sha256": "ff923506634247364b1eed399f891a2677181d03856ff5fd79b75f680a0455d7",
+  "core_sha256": "ae4aba15df453a7983f2e5cf84efa82b8966fb912b4793e28d6afec7fcfa330d",
+  "data_sha256": "ad85d6c6e9d8b8183ab60a1698932fff52c79e9ee56ff26bab25a8d66eca6157",
+  "initial_parameters_sha256": "987e2e39766596473392aecaffe6ac9ecbab712ede788039acfdbc249e7089d2",
+  "batch_order_sha256": "f0544c41de00e77284ba40c3073bb14c866066451a266f885e34dced77c31ec2",
+  "interval_steps": 20,
+  "records": 41,
+  "checked_original_columns": [
+    "step",
+    "train_batch_mse",
+    "lr",
+    "grad_global",
+    "theta_global",
+    "update_global",
+    "rho_global",
+    "clipped",
+    "val_mse",
+    "val_mae",
+    "val_rmse"
+  ],
+  "shared_columns_equal_with_tolerance_1e-12": true,
+  "supplemental_file": "camadas_replay.csv"
+}

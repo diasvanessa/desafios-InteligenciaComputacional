@@ -1,0 +1,88 @@
+{
+  "status": "revisao_posterior_da_escolha; testes temporais retrospectivos",
+  "criterion": "menor MAE medio entre as tres combinacoes confirmadas",
+  "original_frozen_choice": {
+    "optimizer": "adamw",
+    "schedule": "warmup_cosine",
+    "mean": 0.5382072726885477,
+    "std": 0.0061798263462645876,
+    "values": [
+      0.5439561605453491,
+      0.5389938354492188,
+      0.5316718220710754
+    ],
+    "run_ids": [
+      "confirm_adamw_warmup_cosine_s17",
+      "confirm_adamw_warmup_cosine_s29",
+      "confirm_adamw_warmup_cosine_s43"
+    ]
+  },
+  "chosen_finalist": {
+    "optimizer": "muon",
+    "schedule": "warmup_cosine",
+    "mean": 0.5245335102081299,
+    "std": 0.009730879723934627,
+    "values": [
+      0.5173004865646362,
+      0.5207033753395081,
+      0.5355966687202454
+    ],
+    "run_ids": [
+      "confirm_muon_warmup_cosine_s17",
+      "confirm_muon_warmup_cosine_s29",
+      "confirm_muon_warmup_cosine_s43"
+    ],
+    "lr": 0.03162277660168379,
+    "aux_lr": 0.10000000000000002
+  },
+  "test_2023_2025": {
+    "n": 2028,
+    "excluded_runtime": 6,
+    "mae_new": 0.5121833086013794,
+    "mae_previous": 0.5519559871201775,
+    "status": "retrospectivo: teste 2023–2025 já consultado, sem novo teste independente"
+  },
+  "test_2026": {
+    "n": 385,
+    "excluded_runtime": 10,
+    "mae": {
+      "absolute_error_new": 0.6805539727210999,
+      "absolute_error_previous": 0.7252845996424415,
+      "absolute_error_old_43": 0.7251270181322077
+    },
+    "status": "retrospectivo: teste 2026 já consultado, sem novo teste independente"
+  },
+  "test_run_id": "confirm_muon_warmup_cosine_s17",
+  "baseline": {
+    "optimizer": "adam",
+    "schedule": "constant",
+    "lr": 0.001,
+    "seeds": [
+      17,
+      29,
+      43
+    ],
+    "run_ids": [
+      "baseline_s17",
+      "baseline_s29",
+      "baseline_s43"
+    ],
+    "values": [
+      0.523125171661377,
+      0.533126711845398,
+      0.5394483208656311
+    ],
+    "mean": 0.5319000681241354,
+    "std": 0.008230418646719646,
+    "source": "protocolo_final/plano.json e execuções phase=baseline"
+  },
+  "paired_gain_over_baseline": [
+    0.005824685096740723,
+    0.012423336505889893,
+    0.003851652145385742
+  ],
+  "paired_gain_mean": 0.007366557916005452,
+  "paired_gain_std": 0.004489039099531033,
+  "positive_seed_count": 3,
+  "test_recomputed": false
+}

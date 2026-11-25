@@ -1,0 +1,73 @@
+{
+  "config": {
+    "optimizer": "adamw",
+    "lr": 0.10000000000000002,
+    "schedule": "cosine",
+    "seed": 17,
+    "steps": 800,
+    "batch_size": 128,
+    "log_every": 20,
+    "weight_decay": 0.01,
+    "clip_norm": 5.0,
+    "aux_lr": 0.001,
+    "warmup_fraction": 0.1,
+    "min_lr_factor": 0.01
+  },
+  "run_id": "agenda_adamw_cosine",
+  "phase": "schedule",
+  "hypothesis": "decaimento final pode reduzir oscilações e melhorar MAE",
+  "source_sha256": "ae4aba15df453a7983f2e5cf84efa82b8966fb912b4793e28d6afec7fcfa330d",
+  "data_sha256": "ad85d6c6e9d8b8183ab60a1698932fff52c79e9ee56ff26bab25a8d66eca6157",
+  "dataset_npz_sha256": "2849e6415d142028a3f9cc9fbff3c637e2d961e8b5ba465f9c92862f703c19f2",
+  "initial_parameters_sha256": "987e2e39766596473392aecaffe6ac9ecbab712ede788039acfdbc249e7089d2",
+  "batch_order_sha256": "f0544c41de00e77284ba40c3073bb14c866066451a266f885e34dced77c31ec2",
+  "torch": "2.14.0+cpu",
+  "numpy": "2.5.3",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "threads": 1,
+  "device": "cpu",
+  "created_utc": "2026-10-12T03:28:37.212381+00:00",
+  "command": "python \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\03_codigo\\reproduzir.py\" --config \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\04_resultados\\rodada_duracao_completa\\protocolo_final\\logs\\agenda_adamw_cosine\\config.json\" --dados \"C:\\Users\\matheus\\Documents\\codex\\ic\\desafio_3\\04_resultados\\rodada_duracao_completa\\protocolo_final\\dados\"",
+  "metric_selection": "MAE da validação no último passo; sem early stopping ou escolha de checkpoint",
+  "parameter_count": 3585,
+  "optimizer_groups": [
+    {
+      "class": "AdamW",
+      "groups": [
+        {
+          "weight_decay": 0.01,
+          "lr": 0.10000000000000002,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "amsgrad": false,
+          "maximize": false,
+          "foreach": null,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null,
+          "decoupled_weight_decay": true
+        },
+        {
+          "weight_decay": 0.0,
+          "lr": 0.10000000000000002,
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "eps": 1e-08,
+          "amsgrad": false,
+          "maximize": false,
+          "foreach": null,
+          "capturable": false,
+          "differentiable": false,
+          "fused": null,
+          "decoupled_weight_decay": true
+        }
+      ]
+    }
+  ]
+}
